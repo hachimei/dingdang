@@ -1,0 +1,4 @@
+在emulator目录下打开cmd，运行：
+emulator.exe  -avd Nexus_5X_API_27_x86 -dns-server 192.168.1.1  
+
+emulator.exe  -avd Nexus_4_API_23 -dns-server 192.168.1.1
