@@ -1,0 +1,29 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "storybook": "start-storybook -p 9009",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "antd-mobile": "^2.1.2",
+    "expo": "^24.0.0",
+    "rc-form": "^2.1.7",
+    "react": "16.0.0",
+    "react-dom": "^16.2.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz",
+    "react-navigation": "^1.0.0-beta.22"
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.6.3",
+    "react-app-rewired": "^1.4.0",
+    "react-scripts": "^1.0.17",
+    "@storybook/react": "^3.3.3",
+    "@storybook/addon-actions": "^3.3.3",
+    "@storybook/addon-links": "^3.3.3"
+  },
+  "proxy": "http://172.17.4.99:8080/dingdang/"
+}

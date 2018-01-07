@@ -1,0 +1,46 @@
+import React from 'react';
+import {List, InputItem, Switch, Stepper, Range, Button} from 'antd-mobile';
+import {View, Image, ListView, ActivityIndicator, Text} from 'react-native';
+import {createForm} from 'rc-form';
+import {height as SCREENHEIGHT, width as SCREENWIDTH} from './utils/getScreenSize';
+
+const Item = List.Item;
+
+class Login extends React.Component {
+
+/*
+fetch('https://mywebsite.com/endpoint/', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    firstParam: 'yourValue',
+    secondParam: 'yourOtherValue',
+  }),
+});
+ */
+
+    render() {
+        return(
+                <List renderHeader={() => '登录'} style={{width:SCREENWIDTH/2}}>
+                    <InputItem
+                        placeholder="请输入用户名"
+                    >
+                        <Text>用户名</Text>
+                    </InputItem>
+                    <InputItem
+                        placeholder="请输入密码"
+                        type="password"
+                    >
+                        <Text>密码</Text>
+                    </InputItem>
+                </List>
+
+        )
+    }
+}
+
+const LoginWrapper = createForm()(Login)
+export default LoginWrapper;
