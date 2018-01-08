@@ -83,7 +83,7 @@ class UserPersonalData extends React.Component {
                                         source={require('./assets/headPortrait.png')}
                           ></Image>}>
                         头像</Item>
-                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserNickname', {nickcname: user.nickname})
+                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserNickname', {nickname: user.nickname})
                     }
                           extra={user.nickname}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}

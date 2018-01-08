@@ -1,8 +1,8 @@
 import React from "react";
-import {InputItem, Button, WingBlank, Radio, WhiteSpace, List} from 'antd-mobile';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
-import {height as SCREENHEIGHT, width as SCREENWIDTH} from './utils/getScreenSize';
-import {Camera, Permissions,ImagePicker} from 'expo';
+import { InputItem, Button, WingBlank, Radio, WhiteSpace, List } from 'antd-mobile';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { height as SCREENHEIGHT, width as SCREENWIDTH } from './utils/getScreenSize';
+import { Camera, Permissions, ImagePicker } from 'expo';
 
 const RadioItem = Radio.RadioItem;
 
@@ -22,7 +22,7 @@ class CameraScreen extends React.Component {
 
     }
 
-    static navigationOptions = ({navigation}) => ({
+    static navigationOptions = ({ navigation }) => ({
         title: '拍照'
     });
 
@@ -32,20 +32,20 @@ class CameraScreen extends React.Component {
     };
 
     async componentWillMount() {
-        const {status} = await Permissions.askAsync(Permissions.CAMERA);
+        const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({hasCameraPermission: status === 'granted'});
     }
 
     render() {
-        const {hasCameraPermission} = this.state;
+        const { hasCameraPermission } = this.state;
         if (hasCameraPermission === null) {
-            return <View/>;
+            return <View />;
         } else if (hasCameraPermission === false) {
             return <Text>No access to camera</Text>;
         } else {
             return (
-                <View style={{flex: 1}}>
-                    <Camera style={{flex: 1}} type={this.state.type}>
+                <View style={{ flex: 1 }}>
+                    <Camera style={{ flex: 1 }} type={this.state.type}>
                         <View
                             style={{
                                 flex: 1,
@@ -66,7 +66,7 @@ class CameraScreen extends React.Component {
                                     });
                                 }}>
                                 <Text
-                                    style={{fontSize: 18, marginBottom: 10, color: 'white'}}>
+                                    style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
                                     {' '}Flip{' '}
                                 </Text>
                             </TouchableOpacity>
@@ -84,7 +84,7 @@ class UpdateUserHeadPortraitScreen extends React.Component {
 
     }
 
-    static navigationOptions = ({navigation}) => ({
+    static navigationOptions = ({ navigation }) => ({
         title: '修改头像'
     });
 
@@ -93,7 +93,7 @@ class UpdateUserHeadPortraitScreen extends React.Component {
     };
 
     render() {
-        const {navigate} = this.props.navigation;
+        const { navigate } = this.props.navigation;
         let { image } = this.state;
 
         return (
@@ -105,7 +105,7 @@ class UpdateUserHeadPortraitScreen extends React.Component {
                     onClick={this._pickImage}
                 >从本地图库选择</Button></WingBlank>
                 {image &&
-                <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                <Image source={{ uri: image }} style={{ width: 200, height: 200 }}/>}
             </View>
         );
     }
@@ -119,7 +119,7 @@ class UpdateUserHeadPortraitScreen extends React.Component {
         console.log(result);
 
         if (!result.cancelled) {
-            this.setState({ image: result.uri });
+            this.setState({image: result.uri});
         }
     };
 }
@@ -127,17 +127,31 @@ class UpdateUserHeadPortraitScreen extends React.Component {
 class UpdateUserNicknameScreen extends React.Component {
     constructor(props) {
         super(props);
+        const { params } = props.navigation.state;
+
+        this.change = this.change.bind(this);
+
+        this.state = {
+            inputItemValue: params.nickname
+        }
 
     }
 
-    static navigationOptions = ({navigation}) => ({
+    static navigationOptions = ({ navigation }) => ({
         title: '修改昵称'
     });
 
+    change(value) {
+
+        this.setState({
+            inputItemValue: value
+        })
+    }
+
     render() {
-        const {params} = this.props.navigation.state;
-        return (<View>
-            <WingBlank><InputItem style={{width: SCREENWIDTH * 0.8}} value={params.nickcname}/></WingBlank>
+
+        return (<View style={{ flex: 1 }}>
+            <WingBlank><InputItem value={this.state.inputItemValue} onChange={this.change}/></WingBlank>
             <WingBlank><Button type="warning">保存</Button></WingBlank>
         </View>);
     }
@@ -149,7 +163,7 @@ class UpdateUserGenderScreen extends React.Component {
         console.log('UpdateUser的props:' + props.onChange);
         super(props);
 
-        const {params} = this.props.navigation.state;
+        const { params } = this.props.navigation.state;
 
         console.log('params.gender:' + params.gender);
 
@@ -160,7 +174,7 @@ class UpdateUserGenderScreen extends React.Component {
         }
     }
 
-    static navigationOptions = ({navigation}) => ({
+    static navigationOptions = ({ navigation }) => ({
         title: '修改性别'
     });
 
@@ -171,8 +185,8 @@ class UpdateUserGenderScreen extends React.Component {
     }
 
     render() {
-        const {params} = this.props.navigation.state;
-        return (<View style={{flex: 1}}>
+        const { params } = this.props.navigation.state;
+        return (<View style={{ flex: 1 }}>
             <WingBlank>
                 <RadioItem key={1} checked={1 === this.state.gender}
                            onChange={() => params.onChange(1, this.change(1))}>男</RadioItem>
@@ -185,4 +199,4 @@ class UpdateUserGenderScreen extends React.Component {
     }
 }
 
-export {UpdateUserHeadPortraitScreen, UpdateUserNicknameScreen, CameraScreen, UpdateUserGenderScreen};
+export { UpdateUserHeadPortraitScreen, UpdateUserNicknameScreen, CameraScreen, UpdateUserGenderScreen };

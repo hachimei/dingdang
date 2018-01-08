@@ -4,3 +4,5 @@ npm-debug.*
 doc/*.png
 .idea
 .git
+yarn.lock
+yarn-error.log
