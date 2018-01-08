@@ -10,7 +10,8 @@ import Login from './Login';
 import Me from './Me';
 import Register from './Register';
 import ViewUserPersonalData from './ViewUserPersonalData';
-import {UpdateUserNicknameScreen,CameraScreen,UpdateUserGenderScreen,UpdateUserHeadPortraitScreen} from './UpdateUser';
+import {UpdateUserNicknameScreen,CameraScreen,UpdateUserGenderScreen,UpdateUserHeadPortraitScreen
+,UpdateUserQQScreen,UpdateUserIntroductionScreen} from './UpdateUser';
 import { StackNavigator } from 'react-navigation';
 
 
@@ -89,7 +90,9 @@ const DingDangApp = StackNavigator({
     UpdateUserNickname:{screen:UpdateUserNicknameScreen},
     UpdateUserGender:{screen:UpdateUserGenderScreen},
     UpdateUserHeadPortrait:{screen:UpdateUserHeadPortraitScreen},
-    Camera:{screen:CameraScreen}
+    Camera:{screen:CameraScreen},
+    UpdateUserQQ:{screen:UpdateUserQQScreen},
+    UpdateUserIntroduction:{screen:UpdateUserIntroductionScreen}
 });
 
 /*

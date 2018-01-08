@@ -13,7 +13,10 @@ class UserPersonalData extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onChange = this.onChange.bind(this);
+        this.onChangeNickname = this.onChangeNickname.bind(this);
+        this.onChangeGender = this.onChangeGender.bind(this);
+        this.onChangeQQ = this.onChangeQQ.bind(this);
+        this.onChangeIntroduction = this.onChangeIntroduction.bind(this);
 
         this.state = {
             isLoading: false,
@@ -50,11 +53,35 @@ class UserPersonalData extends React.Component {
             .catch((err) => console.error(err))
     }
 
-    onChange(gender){
+    onChangeNickname(nickname){
+        const {user} = this.state;
+        console.log('修改当前用户的昵称为'+nickname);
+        this.setState({
+            user:{...user,nickname:nickname}
+        })
+    }
+
+    onChangeGender(gender){
         const {user} = this.state;
         console.log('修改当前用户的性别为'+gender===1?'男':'女');
         this.setState({
             user:{...user,gender:gender,gender_zw:gender===1?'男':'女'}
+        })
+    }
+
+    onChangeIntroduction(introduction){
+        const {user} = this.state;
+        console.log('修改当前用户的自我介绍为'+introduction);
+        this.setState({
+            user:{...user,introduction:introduction}
+        })
+    }
+
+    onChangeQQ(qq){
+        const {user} = this.state;
+        console.log('修改当前用户的qq为'+qq);
+        this.setState({
+            user:{...user,qq:qq}
         })
     }
 
@@ -83,7 +110,7 @@ class UserPersonalData extends React.Component {
                                         source={require('./assets/headPortrait.png')}
                           ></Image>}>
                         头像</Item>
-                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserNickname', {nickname: user.nickname})
+                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserNickname', {nickname: user.nickname,onChange:this.onChangeNickname})
                     }
                           extra={user.nickname}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
@@ -93,7 +120,7 @@ class UserPersonalData extends React.Component {
                         昵称
                     </Item>
                     <Item arrow="horizontal" onClick={() => {
-                        navigate('UpdateUserGender', {gender: user.gender,onChange:this.onChange})
+                        navigate('UpdateUserGender', {gender: user.gender,onChange:this.onChangGender})
                     }}
                           extra={user.gender_zw}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
@@ -102,8 +129,8 @@ class UserPersonalData extends React.Component {
                     >
                         性别
                     </Item>
-                    <Item arrow="horizontal" onClick={() => {
-                    }}
+                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserIntroduction', {introduction: user.introduction,onChange:this.onChangeIntroduction})
+                    }
                           extra={user.introduction}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
                                         source={require('./assets/selfIntroduction.png')}
@@ -113,8 +140,8 @@ class UserPersonalData extends React.Component {
                     </Item>
                 </List>
                 <List style={{width: SCREENWIDTH * 0.9}}>
-                    <Item arrow="horizontal" onClick={() => {
-                    }}
+                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserQQ', {qq: user.qq,onChange:this.onChangeQQ})
+                    }
                           extra={user.qq}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
                                         source={require('./assets/qq.png')}
@@ -122,8 +149,8 @@ class UserPersonalData extends React.Component {
                     >
                         QQ
                     </Item>
-                    <Item arrow="horizontal" onClick={() => {
-                    }}
+                    <Item arrow="horizontal" onClick={() => {}
+                    }
                           extra={user.wechat}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
                                         source={require('./assets/wechat.png')}

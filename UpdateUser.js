@@ -146,13 +146,16 @@ class UpdateUserNicknameScreen extends React.Component {
         this.setState({
             inputItemValue: value
         })
+
+        let { params } = this.props.navigation.state;
+        params.onChange(value);
+
     }
 
     render() {
 
         return (<View style={{ flex: 1 }}>
             <WingBlank><InputItem value={this.state.inputItemValue} onChange={this.change}/></WingBlank>
-            <WingBlank><Button type="warning">保存</Button></WingBlank>
         </View>);
     }
 }
@@ -185,7 +188,7 @@ class UpdateUserGenderScreen extends React.Component {
     }
 
     render() {
-        const { params } = this.props.navigation.state;
+        let { params } = this.props.navigation.state;
         return (<View style={{ flex: 1 }}>
             <WingBlank>
                 <RadioItem key={1} checked={1 === this.state.gender}
@@ -194,9 +197,84 @@ class UpdateUserGenderScreen extends React.Component {
                            onChange={() => params.onChange(0, this.change(0))}>女</RadioItem>
             </WingBlank>
             <WhiteSpace size="lg"/>
-            <WingBlank><Button type="warning">保存</Button></WingBlank>
         </View>);
     }
 }
 
-export { UpdateUserHeadPortraitScreen, UpdateUserNicknameScreen, CameraScreen, UpdateUserGenderScreen };
+class UpdateUserQQScreen extends React.Component {
+    constructor(props) {
+
+        super(props);
+
+        const { params } = this.props.navigation.state;
+
+        console.log('params.qq:' + params.qq);
+
+        this.change = this.change.bind(this);
+
+        this.state = {
+            inputItemValue: params.qq
+        }
+    }
+
+    static navigationOptions = ({ navigation }) => ({
+        title: '修改QQ'
+    });
+
+    change(value) {
+        this.setState({
+            inputItemValue: value
+        })
+
+        let { params } = this.props.navigation.state;
+        params.onChange(value);
+    }
+
+    render() {
+        let { params } = this.props.navigation.state;
+        return (<View style={{ flex: 1 }}>
+            <WingBlank><InputItem value={this.state.inputItemValue} onChange={this.change}/></WingBlank>
+            <WhiteSpace size="lg"/>
+        </View>);
+    }
+}
+
+class UpdateUserIntroductionScreen extends React.Component {
+    constructor(props) {
+
+        super(props);
+
+        const { params } = this.props.navigation.state;
+
+        console.log('params.introduction:' + params.introduction);
+
+        this.change = this.change.bind(this);
+
+        this.state = {
+            inputItemValue: params.introduction
+        }
+    }
+
+    static navigationOptions = ({ navigation }) => ({
+        title: '修改个人介绍'
+    });
+
+    change(value) {
+        this.setState({
+            inputItemValue: value
+        })
+
+        let { params } = this.props.navigation.state;
+        params.onChange(value);
+    }
+
+    render() {
+        let { params } = this.props.navigation.state;
+        return (<View style={{ flex: 1 }}>
+            <WingBlank><InputItem value={this.state.inputItemValue} onChange={this.change}/></WingBlank>
+            <WhiteSpace size="lg"/>
+        </View>);
+    }
+}
+
+export { UpdateUserHeadPortraitScreen, UpdateUserNicknameScreen, CameraScreen, UpdateUserGenderScreen ,UpdateUserQQScreen,UpdateUserIntroductionScreen};
