@@ -9,10 +9,12 @@ import {height as SCREENHEIGHT, width as SCREENWIDTH} from './utils/getScreenSiz
 import Login from './Login';
 import Me from './Me';
 import Register from './Register';
+import LoginAndRegisterScreen from './LoginAndRegister';
 import ViewUserPersonalData from './ViewUserPersonalData';
 import {UpdateUserNicknameScreen,CameraScreen,UpdateUserGenderScreen,UpdateUserHeadPortraitScreen
-,UpdateUserQQScreen,UpdateUserIntroductionScreen} from './UpdateUser';
+,UpdateUserQQScreen,UpdateUserIntroductionScreen,UpdateUserWechatScreen,UpdateUserEmailScreen} from './UpdateUser';
 import { StackNavigator } from 'react-navigation';
+import {LRTabs} from './Constant';
 
 
 const tabs = [
@@ -61,9 +63,18 @@ class HomeScreen extends React.Component {
                         </Flex>
                         <Flex direction="column" justify="center" align="center" style={{height: SCREENHEIGHT}}>
                             <Text>Content of third tab</Text>
+                            <Button onClick={()=>navigation.navigate('LoginAndRegister')}>登录/注册</Button>
                         </Flex>
                         <Flex direction="column" justify="center" align="center" style={{height: SCREENHEIGHT}}>
-                            <Text>Content of fourth tab</Text>
+                            <Tabs tabs={LRTabs} initialPage={0} tabBarPosition="top">
+                                <Flex direction="column" style={{height: SCREENHEIGHT*0.7}}>
+                                    <Text>hehehheh</Text>
+                                </Flex>
+                                <Flex direction="column" style={{height: SCREENHEIGHT*0.7}}>
+                                    <Register></Register>
+                                </Flex>
+                            </Tabs>
+
                         </Flex>
                         <Flex direction="column" justify="center" align="center"
                               style={{height: SCREENHEIGHT, width: SCREENWIDTH}}
@@ -92,7 +103,10 @@ const DingDangApp = StackNavigator({
     UpdateUserHeadPortrait:{screen:UpdateUserHeadPortraitScreen},
     Camera:{screen:CameraScreen},
     UpdateUserQQ:{screen:UpdateUserQQScreen},
-    UpdateUserIntroduction:{screen:UpdateUserIntroductionScreen}
+    UpdateUserIntroduction:{screen:UpdateUserIntroductionScreen},
+    UpdateUserWechat:{screen:UpdateUserWechatScreen},
+    UpdateUserEmail:{screen:UpdateUserEmailScreen},
+    LoginAndRegister:{screen:LoginAndRegisterScreen}
 });
 
 /*

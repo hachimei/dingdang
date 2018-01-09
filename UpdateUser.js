@@ -3,6 +3,7 @@ import { InputItem, Button, WingBlank, Radio, WhiteSpace, List } from 'antd-mobi
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { height as SCREENHEIGHT, width as SCREENWIDTH } from './utils/getScreenSize';
 import { Camera, Permissions, ImagePicker } from 'expo';
+import {uploadImage} from './utils/uploadImage';
 
 const RadioItem = Radio.RadioItem;
 
@@ -82,6 +83,7 @@ class UpdateUserHeadPortraitScreen extends React.Component {
     constructor(props) {
         super(props);
 
+        this._pickImage = this._pickImage.bind(this);
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -104,8 +106,7 @@ class UpdateUserHeadPortraitScreen extends React.Component {
                 <WingBlank><Button
                     onClick={this._pickImage}
                 >从本地图库选择</Button></WingBlank>
-                {image &&
-                <Image source={{ uri: image }} style={{ width: 200, height: 200 }}/>}
+
             </View>
         );
     }
@@ -117,9 +118,11 @@ class UpdateUserHeadPortraitScreen extends React.Component {
         });
 
         console.log(result);
+        const { params } = this.props.navigation.state;
 
         if (!result.cancelled) {
-            this.setState({image: result.uri});
+            uploadImage(result.uri);
+            params.onChange(result.uri);
         }
     };
 }
@@ -201,44 +204,6 @@ class UpdateUserGenderScreen extends React.Component {
     }
 }
 
-class UpdateUserQQScreen extends React.Component {
-    constructor(props) {
-
-        super(props);
-
-        const { params } = this.props.navigation.state;
-
-        console.log('params.qq:' + params.qq);
-
-        this.change = this.change.bind(this);
-
-        this.state = {
-            inputItemValue: params.qq
-        }
-    }
-
-    static navigationOptions = ({ navigation }) => ({
-        title: '修改QQ'
-    });
-
-    change(value) {
-        this.setState({
-            inputItemValue: value
-        })
-
-        let { params } = this.props.navigation.state;
-        params.onChange(value);
-    }
-
-    render() {
-        let { params } = this.props.navigation.state;
-        return (<View style={{ flex: 1 }}>
-            <WingBlank><InputItem value={this.state.inputItemValue} onChange={this.change}/></WingBlank>
-            <WhiteSpace size="lg"/>
-        </View>);
-    }
-}
-
 class UpdateUserIntroductionScreen extends React.Component {
     constructor(props) {
 
@@ -277,4 +242,119 @@ class UpdateUserIntroductionScreen extends React.Component {
     }
 }
 
-export { UpdateUserHeadPortraitScreen, UpdateUserNicknameScreen, CameraScreen, UpdateUserGenderScreen ,UpdateUserQQScreen,UpdateUserIntroductionScreen};
+class UpdateUserQQScreen extends React.Component {
+    constructor(props) {
+
+        super(props);
+
+        const { params } = this.props.navigation.state;
+
+        console.log('params.qq:' + params.qq);
+
+        this.change = this.change.bind(this);
+
+        this.state = {
+            inputItemValue: params.qq
+        }
+    }
+
+    static navigationOptions = ({ navigation }) => ({
+        title: '修改QQ'
+    });
+
+    change(value) {
+        this.setState({
+            inputItemValue: value
+        })
+
+        let { params } = this.props.navigation.state;
+        params.onChange(value);
+    }
+
+    render() {
+        let { params } = this.props.navigation.state;
+        return (<View style={{ flex: 1 }}>
+            <WingBlank><InputItem value={this.state.inputItemValue} onChange={this.change}/></WingBlank>
+            <WhiteSpace size="lg"/>
+        </View>);
+    }
+}
+
+class UpdateUserWechatScreen extends React.Component {
+    constructor(props) {
+
+        super(props);
+
+        const { params } = this.props.navigation.state;
+
+        console.log('params.wechat:' + params.wechat);
+
+        this.change = this.change.bind(this);
+
+        this.state = {
+            inputItemValue: params.wechat
+        }
+    }
+
+    static navigationOptions = ({ navigation }) => ({
+        title: '修改微信'
+    });
+
+    change(value) {
+        this.setState({
+            inputItemValue: value
+        })
+
+        let { params } = this.props.navigation.state;
+        params.onChange(value);
+    }
+
+    render() {
+        let { params } = this.props.navigation.state;
+        return (<View style={{ flex: 1 }}>
+            <WingBlank><InputItem value={this.state.inputItemValue} onChange={this.change}/></WingBlank>
+            <WhiteSpace size="lg"/>
+        </View>);
+    }
+}
+
+class UpdateUserEmailScreen extends React.Component {
+    constructor(props) {
+
+        super(props);
+
+        const { params } = this.props.navigation.state;
+
+        console.log('params.email:' + params.email);
+
+        this.change = this.change.bind(this);
+
+        this.state = {
+            inputItemValue: params.email
+        }
+    }
+
+    static navigationOptions = ({ navigation }) => ({
+        title: '修改邮箱'
+    });
+
+    change(value) {
+        this.setState({
+            inputItemValue: value
+        })
+
+        let { params } = this.props.navigation.state;
+        params.onChange(value);
+    }
+
+    render() {
+        let { params } = this.props.navigation.state;
+        return (<View style={{ flex: 1 }}>
+            <WingBlank><InputItem value={this.state.inputItemValue} onChange={this.change}/></WingBlank>
+            <WhiteSpace size="lg"/>
+        </View>);
+    }
+}
+
+export { UpdateUserHeadPortraitScreen, UpdateUserNicknameScreen, CameraScreen, UpdateUserGenderScreen ,UpdateUserQQScreen,UpdateUserIntroductionScreen
+,UpdateUserWechatScreen,UpdateUserEmailScreen};

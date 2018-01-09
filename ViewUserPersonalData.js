@@ -4,7 +4,9 @@ import {List, InputItem, WhiteSpace, Button} from 'antd-mobile';
 import {createForm} from 'rc-form';
 import {height as SCREENHEIGHT, width as SCREENWIDTH} from "./utils/getScreenSize";
 import ChooseHeadPortrait from './ChooseHeadPortrait';
-import {YXIP as ip, getUserByIdURL, registerUserURL} from './Constant';
+import {YXIP as ip, getUserByIdURL, registerUserURL,updateUserURL} from './Constant';
+import {json2params} from './utils/json2params';
+import {object2console} from './utils/object2console';
 
 const Item = List.Item;
 
@@ -13,25 +15,42 @@ class UserPersonalData extends React.Component {
     constructor(props) {
         super(props);
 
+        this.onChangeHeadPortrait=this.onChangeHeadPortrait.bind(this);
         this.onChangeNickname = this.onChangeNickname.bind(this);
         this.onChangeGender = this.onChangeGender.bind(this);
-        this.onChangeQQ = this.onChangeQQ.bind(this);
         this.onChangeIntroduction = this.onChangeIntroduction.bind(this);
+        this.onChangeQQ = this.onChangeQQ.bind(this);
+        this.onChangeWechat = this.onChangeWechat.bind(this);
+        this.onChangeEmail = this.onChangeEmail.bind(this);
+
+        this.submit = this.submit.bind(this);
 
         this.state = {
-            isLoading: false,
-            user: {
-                qq: '123321',
-                wechat: '345543',
-                email:'@2980',
-                nickname:'张三',
-                phone:'13432323232',
-                gender_zw:'男',
-                gender:1
-            }
+            isLoading: true
+            
         }
     }
 
+    componentDidMount(){
+        fetch(getUserByIdURL)
+            .then((response) => {
+                if (response.status !== 200){
+                    console.error(getUserByIdURL + '失败，status:' + response.status);
+                    alert('连接服务器失败')
+                }
+                else{
+                    response.json().then((responseJson)=>{
+                        object2console(responseJson);
+                        this.setState({
+                            isLoading:false,
+                            user:responseJson
+                        })
+                    });
+                }
+            })
+            .catch((err) => console.error(err))
+    }
+    
     submit() {
         let myInit = {
             method: 'POST',
@@ -42,15 +61,27 @@ class UserPersonalData extends React.Component {
 
             },
             cache: 'default',
-            body: 'phone=22222&password=1234'
+            body:json2params(this.state.user)
         };
-        return fetch(registerUserURL, myInit)
+        fetch(updateUserURL, myInit)
             .then((response) => {
-                if (response.status !== 200)
-                    console.error(registerUserURL + '失败，status:' + response.status);
-                alert('保存成功！')
+                if (response.status !== 200){
+                    console.error(updateUserURL + '失败，status:' + response.status);
+                    alert('连接服务器失败')
+                }
+                else
+                    alert('保存成功！')
             })
             .catch((err) => console.error(err))
+    }
+
+    onChangeHeadPortrait(image){
+        const {user} = this.state;
+        console.log('修改当前用户的图片为');
+        this.setState({
+            user:{...user,icon:image},
+            imageChange:true
+        })
     }
 
     onChangeNickname(nickname){
@@ -85,6 +116,22 @@ class UserPersonalData extends React.Component {
         })
     }
 
+    onChangeWechat(wechat){
+        const {user} = this.state;
+        console.log('修改当前用户的wechat为'+wechat);
+        this.setState({
+            user:{...user,wechat:wechat}
+        })
+    }
+
+    onChangeEmail(email){
+        const {user} = this.state;
+        console.log('修改当前用户的email为'+email);
+        this.setState({
+            user:{...user,email:email}
+        })
+    }
+
     render() {
         if (this.state.isLoading) {
             return (
@@ -101,10 +148,10 @@ class UserPersonalData extends React.Component {
         return (
             <View>
                 <List renderHeader={() => '完善用户信息'} style={{width: SCREENWIDTH * 0.9}}>
-                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserHeadPortrait', {nickcname: user.nickname})
+                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserHeadPortrait', {onChange: this.onChangeHeadPortrait})
                     }
                           extra={<Image style={{height: 40, width: 40, marginRight: 5}}
-                                        source={{uri: ip + user.icon}}
+                                        source={this.state.imageChange?{uri:user.icon}:{uri:ip+user.icon}}
                           ></Image>}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
                                         source={require('./assets/headPortrait.png')}
@@ -149,7 +196,7 @@ class UserPersonalData extends React.Component {
                     >
                         QQ
                     </Item>
-                    <Item arrow="horizontal" onClick={() => {}
+                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserWechat', {wechat: user.wechat,onChange:this.onChangeWechat})
                     }
                           extra={user.wechat}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
@@ -158,8 +205,8 @@ class UserPersonalData extends React.Component {
                     >
                         微信
                     </Item>
-                    <Item arrow="horizontal" onClick={() => {
-                    }}
+                    <Item arrow="horizontal" onClick={() => navigate('UpdateUserEmail', {email: user.email,onChange:this.onChangeEmail})
+                    }
                           extra={user.email}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
                                         source={require('./assets/mail.png')}
@@ -167,8 +214,8 @@ class UserPersonalData extends React.Component {
                     >
                         邮箱
                     </Item>
-                    <Item arrow="horizontal" onClick={() => {
-                    }}
+                    <Item arrow="horizontal" onClick={() => {}
+                    }
                           extra='有时间再来做'
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}
                                         source={require('./assets/selfIntroduction.png')}
