@@ -37,7 +37,7 @@ class UserPersonalData extends React.Component {
     componentDidMount(){
 
        let {params} = this.props.navigation.state;
-            console.log('URL'+getUserByIdURL);
+            console.log('URL'+getUserByIdURL+ params.phone);
         if(params) {
             fetch(getUserByIdURL + params.phone)
                 .then((response) => {
@@ -176,7 +176,7 @@ class UserPersonalData extends React.Component {
                         昵称
                     </Item>
                     <Item arrow="horizontal" onClick={() => {
-                        navigate('UpdateUserGender', {gender: user.gender,onChange:this.onChangGender})
+                        navigate('UpdateUserGender', {gender: user.gender,onChange:this.onChangeGender})
                     }}
                           extra={user.gender_zw}
                           thumb={<Image style={{height: 20, width: 20, marginRight: 5}}

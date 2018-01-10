@@ -1,20 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, View, ScrollView, Image} from 'react-native';
-import { WhiteSpace,Button, Tabs, Flex, SearchBar, Card,NavBar,Icon} from 'antd-mobile';
-// import Test from './example1';
-import Test from './example2';
-// import SearchBar from './SearchBar';
-// import TapMenu from './TabMenu';
+import { Text, View, Image} from 'react-native';
+import { WhiteSpace,Button, Tabs, Flex, SearchBar, Card,Icon,List} from 'antd-mobile';
 import {height as SCREENHEIGHT, width as SCREENWIDTH} from './utils/getScreenSize';
-import Login from './Login';
-import Me from './Me';
-import Register from './Register';
 import LoginAndRegisterScreen from './LoginAndRegister';
 import ViewUserPersonalData from './ViewUserPersonalData';
 import {UpdateUserNicknameScreen,CameraScreen,UpdateUserGenderScreen,UpdateUserHeadPortraitScreen
     ,UpdateUserQQScreen,UpdateUserIntroductionScreen,UpdateUserWechatScreen,UpdateUserEmailScreen} from './UpdateUser';
 import { StackNavigator } from 'react-navigation';
-import {LRTabs} from './Constant';
 import {object2console} from './utils/object2console';
 import ViewUserPersonalDataScreen from './ViewUserPersonalData';
 
@@ -58,7 +50,7 @@ class HomeScreen extends React.Component {
         const { navigation } = this.props;
 
         return (
-            <ScrollView>
+            <View>
                 <Flex style={{height: SCREENHEIGHT*0.938}}>
                     <Tabs tabs={tabs} initialPage={4} tabBarPosition="bottom" renderTab={renderTab}
                           style={{backgroundColor: '#fff'}}>
@@ -66,42 +58,39 @@ class HomeScreen extends React.Component {
                             <SearchBar/>
                             <WhiteSpace size="lg"/>
 
-                            <View><Text>Content of first tab</Text></View>
+                            <View><Text>首页</Text></View>
 
                         </Flex>
                         <Flex direction="column" style={{height: SCREENHEIGHT}}>
                             <SearchBar/>
-                            <View><Text>Content of second tab</Text></View>
+                            <View><Text>分类</Text></View>
                         </Flex>
                         <Flex direction="column" justify="center" align="center" style={{height: SCREENHEIGHT}}>
-                            <Text>Content of third tab</Text>
+                            <Text>购物车</Text>
 
                         </Flex>
                         <Flex direction="column" justify="center" align="center" style={{height: SCREENHEIGHT}}>
-                            <Text>Content of fourth tab</Text>
+                            <Text>我的足迹</Text>
                         </Flex>
                         <Flex direction="column" justify="center" align="center"
                               style={{height: SCREENHEIGHT, width: SCREENWIDTH}}
                         >
-                            <Button
-                                onClick={()=>navigation.navigate('LoginAndRegister',{getPhone:this.getPhone})}>登录/注册</Button>
-                            <Button onClick={()=>navigation.navigate('ViewUserPersonalData',{phone:this.state.phone})}>完善个人资料</Button>
+                            <List>
+                                <Button type="primary"
+                                        onClick={()=>navigation.navigate('LoginAndRegister',{getPhone:this.getPhone})}>登录/注册</Button>
+                                <WhiteSpace></WhiteSpace>
+                                <Button type="primary"  onClick={()=>navigation.navigate('ViewUserPersonalData',{phone:this.state.phone})}>完善个人资料</Button>
+                            </List>
+
+
                         </Flex>
                     </Tabs>
                 </Flex>
-            </ScrollView>
+            </View>
         )
     }
 }
-class ReactScreen extends React.Component {
-    static navigationOptions = {
-        title: 'React'
-    };
 
-    render() {
-        return <Text>Hello, React!</Text>;
-    }
-}
 
 const DingDangApp = StackNavigator({
     Home: {screen: HomeScreen},

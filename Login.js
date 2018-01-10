@@ -1,5 +1,5 @@
 import React from 'react';
-import {List, InputItem, WhiteSpace, Button,WingBlank } from 'antd-mobile';
+import {List, InputItem, WhiteSpace, Button,WingBlank,Toast } from 'antd-mobile';
 import {View, Image, ListView, ActivityIndicator, Text,TouchableHighlight} from 'react-native';
 import {createForm} from 'rc-form';
 import {height as SCREENHEIGHT, width as SCREENWIDTH} from './utils/getScreenSize';
@@ -8,6 +8,7 @@ import {object2console} from './utils/object2console';
 import {json2params} from './utils/json2params';
 import { NavigationActions } from 'react-navigation'
 
+const regex = new RegExp('(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,20}');
 const Item = List.Item;
 
 class Login extends React.Component {
@@ -39,9 +40,24 @@ fetch('https://mywebsite.com/endpoint/', {
             password:'',
             inputVerifyCode:'',
             codeImage:YXIP+getVerifyCode,
-            sbumitDisabled:false
+            sbumitDisabled:true,
+            phoneError:false,
+            passwordError:false
         })
     }
+
+    onPhoneErrorClick = () => {
+        if (this.state.phoneError) {
+            Toast.info('请输入有效的手机号');
+        }
+    }
+
+    onPasswordErrorClick = ()=>{
+        if (this.state.passwordError) {
+            Toast.info('密码中必须包含字母、数字、特称字符，至少8个字符，最多20个字符。');
+        }
+    }
+
 
     vcodeFresh(){
         this.setState({
@@ -50,12 +66,32 @@ fetch('https://mywebsite.com/endpoint/', {
     }
 
     changePhone(value){
+        if (value.replace(/\s/g, '').length < 11) {
+            this.setState({
+                phoneError: true,
+                sbumitDisabled:true
+            });
+        } else {
+            this.setState({
+                phoneError: false,
+                sbumitDisabled:false
+            });
+        }
         this.setState({
             id:value
         })
     }
 
     changePWD(value){
+        if(regex.test(value)){
+            this.setState({
+                passwordError: false,
+            });
+        }else{
+            this.setState({
+                passwordError: true,
+            });
+        }
         this.setState({
             password:value
         })
@@ -68,6 +104,23 @@ fetch('https://mywebsite.com/endpoint/', {
     }
 
     submit(){
+
+        if(!this.state.id){
+            Toast.info('手机号不能为空')
+            return;
+        }
+        if(this.state.passwordError){
+            Toast.info('密码不符合要求')
+            return;
+        }
+        if(!this.state.password){
+            Toast.info('密码不能为空')
+            return;
+        }
+        if(!this.state.inputVerifyCode){
+            Toast.info('验证码不能为空')
+            return;
+        }
 
         const {navigation}=this.props;
         const getPhone  = this.props.getPhone;
@@ -104,12 +157,9 @@ fetch('https://mywebsite.com/endpoint/', {
                         if(responseObj.state === 'fail')
                             this.setState({fail:responseObj['msg'],sbumitDisabled:false})
                         else{
-
+                            getPhone(this.state.id);
                             navigation.goBack(0)
                         }
-                        console.log('phoneId'+this.state.id);
-                        getPhone(this.state.id);
-                        navigation.goBack(0)
                     }) .catch((err) => console.error(err));
 
                 }
@@ -134,9 +184,12 @@ fetch('https://mywebsite.com/endpoint/', {
                                {...getFieldProps('phone')}
                                type="phone"
                                maxLength={13}
+                               clear={true}
                                placeholder="请输入手机号"
                                onChange={this.changePhone}
                                value={this.state.id}
+                               error={this.state.phoneError}
+                               onErrorClick={this.onPhoneErrorClick}
                            >
                                <Text>手机号</Text>
                            </InputItem>
@@ -146,8 +199,12 @@ fetch('https://mywebsite.com/endpoint/', {
                            <InputItem
                                placeholder="请输入密码"
                                type="password"
+                               clear={true}
+                               maxLength={20}
                                onChange={this.changePWD}
                                value={this.state.password}
+                               error={this.state.passwordError}
+                               onErrorClick={this.onPasswordErrorClick}
                            >
                                <Text>密码</Text>
                            </InputItem>
@@ -158,6 +215,7 @@ fetch('https://mywebsite.com/endpoint/', {
                        <View style={{flex:1}}>
                         <InputItem
                                placeholder="验证码"
+                                maxLength={4}
                                onChange={this.changeVCode}
                                value={this.state.inputVerifyCode}
                            >

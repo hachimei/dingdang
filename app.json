@@ -5,7 +5,7 @@
     "slug": "dingdang",
     "privacy": "public",
     "sdkVersion": "24.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": ["android"],
     "version": "1.0.180110_beta",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
