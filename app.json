@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "dingDangBookShop",
+    "name": "dingdang",
     "description": "First App for my team!",
-    "slug": "dingDangBookShop",
+    "slug": "dingdang",
     "privacy": "public",
     "sdkVersion": "24.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.0.0",
+    "version": "1.0.180110_beta",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {

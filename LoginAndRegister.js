@@ -21,12 +21,15 @@ export default class LoginAndRegister extends React.Component {
 
     render() {
 
+        const { navigation } = this.props;
+        let { params } = navigation.state;
+
         return  <Tabs tabs={LRTabs} initialPage={0} tabBarPosition="top">
             <Flex direction="column" style={{height: SCREENHEIGHT*0.7}}>
-                <Login></Login>
+                <Login navigation={navigation} getPhone={params.getPhone}></Login>
             </Flex>
             <Flex direction="column" style={{height: SCREENHEIGHT*0.7}}>
-                <Register></Register>
+                <Register navigation={navigation} getPhone={params.getPhone}></Register>
             </Flex>
         </Tabs>
     }

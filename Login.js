@@ -1,11 +1,12 @@
 import React from 'react';
-import {List, InputItem, WhiteSpace, Button,WingBlank} from 'antd-mobile';
-import {View, Image, ListView, ActivityIndicator, Text} from 'react-native';
+import {List, InputItem, WhiteSpace, Button,WingBlank } from 'antd-mobile';
+import {View, Image, ListView, ActivityIndicator, Text,TouchableHighlight} from 'react-native';
 import {createForm} from 'rc-form';
 import {height as SCREENHEIGHT, width as SCREENWIDTH} from './utils/getScreenSize';
 import {getVerifyCode,YXIP,loginURL} from './Constant';
 import {object2console} from './utils/object2console';
 import {json2params} from './utils/json2params';
+import { NavigationActions } from 'react-navigation'
 
 const Item = List.Item;
 
@@ -31,10 +32,21 @@ fetch('https://mywebsite.com/endpoint/', {
         this.changePhone= this.changePhone.bind(this);
         this.changePWD= this.changePWD.bind(this);
         this.changeVCode= this.changeVCode.bind(this);
+        this.vcodeFresh = this.vcodeFresh.bind(this);
 
         this.state=({
-            user:{phone:'',password:'',inputVerifyCode:''}
+            id:'',
+            password:'',
+            inputVerifyCode:'',
+            codeImage:YXIP+getVerifyCode,
+            sbumitDisabled:false
         })
+    }
+
+    vcodeFresh(){
+        this.setState({
+            codeImage:YXIP+getVerifyCode+'?time='+(new Date())
+        });
     }
 
     changePhone(value){
@@ -56,6 +68,14 @@ fetch('https://mywebsite.com/endpoint/', {
     }
 
     submit(){
+
+        const {navigation}=this.props;
+        const getPhone  = this.props.getPhone;
+
+        this.setState({
+            sbumitDisabled:true
+        })
+
         let myInit = {
             method: 'POST',
             mode: 'cors',
@@ -68,19 +88,28 @@ fetch('https://mywebsite.com/endpoint/', {
             body:json2params(this.state)
         };
 
-        object2console(myInit.body);
+
 
         fetch(YXIP+loginURL, myInit)
             .then((response) => {
                 if (response.status !== 200){
                     console.error(loginURL + '失败，status:' + response.status);
-                    alert('连接服务器失败')
+                    alert('连接服务器失败');
+                    this.setState({
+                        sbumitDisabled:false
+                    })
                 }
                 else{
                     response.json().then((responseObj)=>{
                         if(responseObj.state === 'fail')
-                            this.setState({fail:responseObj['msg']})
+                            this.setState({fail:responseObj['msg'],sbumitDisabled:false})
+                        else{
 
+                            navigation.goBack(0)
+                        }
+                        console.log('phoneId'+this.state.id);
+                        getPhone(this.state.id);
+                        navigation.goBack(0)
                     }) .catch((err) => console.error(err));
 
                 }
@@ -137,15 +166,17 @@ fetch('https://mywebsite.com/endpoint/', {
                         </View>
                     }
                        extra={
+                       <TouchableHighlight onPress={this.vcodeFresh}>
                         <Image style={{height: 20, width: 60, marginRight: 5}}
-                                  source={{uri:YXIP+getVerifyCode}}
+                                  source={{uri:this.state.codeImage}}
                            ></Image>
+                       </TouchableHighlight>
                        }>
 
                        </Item>
                        <WhiteSpace></WhiteSpace>
                        <Item>
-                           <WingBlank><Button type="warning" onClick={this.submit}>登录</Button></WingBlank>
+                           <WingBlank><Button type="warning" onClick={this.submit} disabled={this.state.sbumitDisabled}>登录</Button></WingBlank>
                        </Item>
                        <View style={{flex:1}}><Text>{this.state.fail?this.state.fail:''}</Text></View>
                    </List>

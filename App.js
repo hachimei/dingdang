@@ -12,10 +12,11 @@ import Register from './Register';
 import LoginAndRegisterScreen from './LoginAndRegister';
 import ViewUserPersonalData from './ViewUserPersonalData';
 import {UpdateUserNicknameScreen,CameraScreen,UpdateUserGenderScreen,UpdateUserHeadPortraitScreen
-,UpdateUserQQScreen,UpdateUserIntroductionScreen,UpdateUserWechatScreen,UpdateUserEmailScreen} from './UpdateUser';
+    ,UpdateUserQQScreen,UpdateUserIntroductionScreen,UpdateUserWechatScreen,UpdateUserEmailScreen} from './UpdateUser';
 import { StackNavigator } from 'react-navigation';
 import {LRTabs} from './Constant';
-
+import {object2console} from './utils/object2console';
+import ViewUserPersonalDataScreen from './ViewUserPersonalData';
 
 const tabs = [
     {title: '首页', sub: '1', src: require('./assets/home.png')},
@@ -33,22 +34,35 @@ const renderTab = (tab) => {
 };
 
 class HomeScreen extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
+
+        this.getPhone = this.getPhone.bind(this);
+
+        this.state = ({
+            phone: ''
+        })
     }
+
     static navigationOptions = {
         title: '叮当书城'
     };
+
+    getPhone(value) {
+        this.setState({
+            phone: value
+        });
+    }
+
     render() {
         const { navigation } = this.props;
+
         return (
             <ScrollView>
                 <Flex style={{height: SCREENHEIGHT*0.938}}>
                     <Tabs tabs={tabs} initialPage={4} tabBarPosition="bottom" renderTab={renderTab}
                           style={{backgroundColor: '#fff'}}>
                         <Flex direction="column" style={{height: SCREENHEIGHT}}>
-                            <WhiteSpace size="lg"/>
-                            <WhiteSpace size="lg"/>
                             <SearchBar/>
                             <WhiteSpace size="lg"/>
 
@@ -56,30 +70,22 @@ class HomeScreen extends React.Component {
 
                         </Flex>
                         <Flex direction="column" style={{height: SCREENHEIGHT}}>
-                            <WhiteSpace size="lg"/>
-                            <WhiteSpace size="lg"/>
                             <SearchBar/>
                             <View><Text>Content of second tab</Text></View>
                         </Flex>
                         <Flex direction="column" justify="center" align="center" style={{height: SCREENHEIGHT}}>
                             <Text>Content of third tab</Text>
-                            <Button onClick={()=>navigation.navigate('LoginAndRegister')}>登录/注册</Button>
+
                         </Flex>
                         <Flex direction="column" justify="center" align="center" style={{height: SCREENHEIGHT}}>
-                            <Tabs tabs={LRTabs} initialPage={0} tabBarPosition="top">
-                                <Flex direction="column" style={{height: SCREENHEIGHT*0.7}}>
-                                    <Text>hehehheh</Text>
-                                </Flex>
-                                <Flex direction="column" style={{height: SCREENHEIGHT*0.7}}>
-                                    <Register></Register>
-                                </Flex>
-                            </Tabs>
-
+                            <Text>Content of fourth tab</Text>
                         </Flex>
                         <Flex direction="column" justify="center" align="center"
                               style={{height: SCREENHEIGHT, width: SCREENWIDTH}}
                         >
-                            <ViewUserPersonalData navigation={navigation}></ViewUserPersonalData>
+                            <Button
+                                onClick={()=>navigation.navigate('LoginAndRegister',{getPhone:this.getPhone})}>登录/注册</Button>
+                            <Button onClick={()=>navigation.navigate('ViewUserPersonalData',{phone:this.state.phone})}>完善个人资料</Button>
                         </Flex>
                     </Tabs>
                 </Flex>
@@ -91,32 +97,34 @@ class ReactScreen extends React.Component {
     static navigationOptions = {
         title: 'React'
     };
+
     render() {
         return <Text>Hello, React!</Text>;
     }
 }
 
 const DingDangApp = StackNavigator({
-    Home: { screen: HomeScreen },
-    UpdateUserNickname:{screen:UpdateUserNicknameScreen},
-    UpdateUserGender:{screen:UpdateUserGenderScreen},
-    UpdateUserHeadPortrait:{screen:UpdateUserHeadPortraitScreen},
-    Camera:{screen:CameraScreen},
-    UpdateUserQQ:{screen:UpdateUserQQScreen},
-    UpdateUserIntroduction:{screen:UpdateUserIntroductionScreen},
-    UpdateUserWechat:{screen:UpdateUserWechatScreen},
-    UpdateUserEmail:{screen:UpdateUserEmailScreen},
-    LoginAndRegister:{screen:LoginAndRegisterScreen}
+    Home: {screen: HomeScreen},
+    UpdateUserNickname: {screen: UpdateUserNicknameScreen},
+    UpdateUserGender: {screen: UpdateUserGenderScreen},
+    UpdateUserHeadPortrait: {screen: UpdateUserHeadPortraitScreen},
+    Camera: {screen: CameraScreen},
+    UpdateUserQQ: {screen: UpdateUserQQScreen},
+    UpdateUserIntroduction: {screen: UpdateUserIntroductionScreen},
+    UpdateUserWechat: {screen: UpdateUserWechatScreen},
+    UpdateUserEmail: {screen: UpdateUserEmailScreen},
+    LoginAndRegister: {screen: LoginAndRegisterScreen},
+    ViewUserPersonalData: {screen: ViewUserPersonalDataScreen}
 });
 
 /*
-<View style={styles.container}>
-                <Text>hello,Exdeiidpo!!</Text>
-                <Button type="primary">Learn more</Button>
-                <Button loading>loading</Button>
+ <View style={styles.container}>
+ <Text>hello,Exdeiidpo!!</Text>
+ <Button type="primary">Learn more</Button>
+ <Button loading>loading</Button>
 
-            </View>
-            <Image style={{width: 50, height: 50}} source={{uri:tabs.src}}/>
+ </View>
+ <Image style={{width: 50, height: 50}} source={{uri:tabs.src}}/>
  */
 
 

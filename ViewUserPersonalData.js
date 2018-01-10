@@ -26,29 +26,38 @@ class UserPersonalData extends React.Component {
         this.submit = this.submit.bind(this);
 
         this.state = {
-            isLoading: true
-            
+            isLoading: true,
         }
     }
 
+    static navigationOptions = ({ navigation }) => ({
+        title: '完善个人资料'
+    });
+
     componentDidMount(){
-        fetch(getUserByIdURL)
-            .then((response) => {
-                if (response.status !== 200){
-                    console.error(getUserByIdURL + '失败，status:' + response.status);
-                    alert('连接服务器失败')
-                }
-                else{
-                    response.json().then((responseJson)=>{
-                        object2console(responseJson);
-                        this.setState({
-                            isLoading:false,
-                            user:responseJson
-                        })
-                    });
-                }
-            })
-            .catch((err) => console.error(err))
+
+       let {params} = this.props.navigation.state;
+            console.log('URL'+getUserByIdURL);
+        if(params) {
+            fetch(getUserByIdURL + params.phone)
+                .then((response) => {
+                    if (response.status !== 200) {
+                        console.error(getUserByIdURL + '失败，status:' + response.status);
+                        alert('连接服务器失败')
+                    }
+                    else {
+                        response.json().then((responseJson)=> {
+
+                            this.setState({
+                                isLoading: false,
+                                user: responseJson
+                            })
+                        });
+                    }
+                })
+                .catch((err) => console.error(err))
+        }
+        
     }
     
     submit() {
@@ -133,6 +142,7 @@ class UserPersonalData extends React.Component {
     }
 
     render() {
+
         if (this.state.isLoading) {
             return (
                 <View style={{flex: 1, paddingTop: 20}}>
@@ -140,14 +150,13 @@ class UserPersonalData extends React.Component {
                 </View>
             );
         }
-        ;
 
         const {navigate} = this.props.navigation;
         const user = this.state.user;
         console.log(user);
         return (
-            <View>
-                <List renderHeader={() => '完善用户信息'} style={{width: SCREENWIDTH * 0.9}}>
+            <View style={{flex:1}}>
+                <List renderHeader={() => ''} style={{width: SCREENWIDTH}}>
                     <Item arrow="horizontal" onClick={() => navigate('UpdateUserHeadPortrait', {onChange: this.onChangeHeadPortrait})
                     }
                           extra={<Image style={{height: 40, width: 40, marginRight: 5}}
@@ -186,7 +195,7 @@ class UserPersonalData extends React.Component {
                         个人介绍
                     </Item>
                 </List>
-                <List style={{width: SCREENWIDTH * 0.9}}>
+                <List style={{width: SCREENWIDTH}}>
                     <Item arrow="horizontal" onClick={() => navigate('UpdateUserQQ', {qq: user.qq,onChange:this.onChangeQQ})
                     }
                           extra={user.qq}

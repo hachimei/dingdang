@@ -55,6 +55,13 @@ class Register extends React.Component {
     }
 
     submit(){
+
+        const {navigation}  = this.props;
+
+        this.setState({
+            nextStatus:true
+        })
+
         let myInit = {
             method: 'POST',
             mode: 'cors',
@@ -70,10 +77,16 @@ class Register extends React.Component {
             .then((response) => {
                 if (response.status !== 200){
                     console.error(registerUserURL + '失败，status:' + response.status);
-                    alert('连接服务器失败')
+                    alert('连接服务器失败');
+                    this.setState({
+                        nextStatus:false
+                    })
                 }
-                else
-                    alert('注册成功！')
+                else{
+                    alert('注册成功！');
+                    navigation.goBack(0)
+                }
+
             })
             .catch((err) => console.error(err))
     }
@@ -118,7 +131,7 @@ class Register extends React.Component {
                     <WhiteSpace></WhiteSpace>
                     <Item>
                         <WingBlank><Button type="warning" onClick={this.submit}
-                        disabled={this.state.nextStatus}>下一步</Button></WingBlank>
+                        disabled={this.state.nextStatus}>注册</Button></WingBlank>
                     </Item>
                 </List>
             </WingBlank>
