@@ -50,8 +50,7 @@ class HomeScreen extends React.Component {
         const { navigation } = this.props;
 
         return (
-            <View>
-                <Flex style={{height: SCREENHEIGHT*0.938}}>
+                <Flex style={{height: SCREENHEIGHT-35*2}}>
                     <Tabs tabs={tabs} initialPage={4} tabBarPosition="bottom" renderTab={renderTab}
                           style={{backgroundColor: '#fff'}}>
                         <Flex direction="column" style={{height: SCREENHEIGHT}}>
@@ -86,7 +85,6 @@ class HomeScreen extends React.Component {
                         </Flex>
                     </Tabs>
                 </Flex>
-            </View>
         )
     }
 }
